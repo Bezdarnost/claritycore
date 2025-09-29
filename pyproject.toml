@@ -1,0 +1,31 @@
+[project]
+name = "claritycore"
+version = "0.0.1"
+description = "Next-generation Open Source toolkit for low-level vision. Engineered for state-of-the-art performance in image and video restoration, including Super-Resolution, Denoising, Deblurring, and more."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+authors = [
+    { name = "Aman Urumbekov", email = "amanurumbekov@gmail.com" },
+]
+
+keywords = ["computer-vision", "image-restoration", "super-resolution", "denoising", "deblurring", "video-restoration"]
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Image Processing",
+]
+
+[project.scripts]
+claritycore = "claritycore.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/bezdarnost/claritycore"
+Repository = "https://github.com/bezdarnost/claritycore"
+
+[build-system]
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"

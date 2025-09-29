@@ -1,0 +1,104 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C/C++/Ext
+*.so
+*.pyd
+*.dll
+*.dylib
+
+# Distribution / packaging
+.Python
+build/
+dist/
+downloads/
+eggs/
+.eggs/
+sdist/
+wheels/
+share/python-wheels/
+pip-wheel-metadata/
+*.egg-info/
+*.egg
+MANIFEST
+
+# Build backends and specs
+*.spec
+*.whl
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# PEP 582
+__pypackages__/
+
+# uv (envs typically in .venv above; keep slot for future)
+.uv/
+uv.lock
+
+# Testing / coverage
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+.pyre/
+.pytype/
+
+# Jupyter / IPython
+.ipynb_checkpoints/
+profile_default/
+ipython_config.py
+jupyter_cache/
+
+# Type checkers / linters
+pyrightconfig.json
+
+# IDEs / editors
+.vscode/
+.idea/
+*.iml
+.history/
+.spyproject/
+.ropeproject/
+
+# Environment / secrets
+.env
+.env.*
+.envrc
+.python-version
+
+# Logs and databases
+logs/
+datasets/
+*.log
+*.sqlite3
+*.db
+
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+.Spotlight-V100
+.Trashes
+*.swp
+*.swo
+*~
+
+# Documentation builds
+docs/_build/
+site/

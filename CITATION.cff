@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+title: ClarityCore
+message: >-
+  If you use this software, please cite it using the metadata below.
+type: software
+authors:
+  - family-names: Urumbekov
+    given-names: Aman
+    email: amanurumbekov@gmail.com
+identifiers:
+  - type: url
+    value: https://github.com/amanurumbekov/claritycore
+repository-code: https://github.com/amanurumbekov/claritycore
+version: 0.0.1
+date-released: 2025-09-29
+abstract: >-
+  Next-generation Open Source toolkit for low-level vision. Engineered for
+  state-of-the-art performance in image and video restoration, including
+  Super-Resolution, Denoising, Deblurring, and more.
+license: Apache-2.0
+keywords:
+  - computer-vision
+  - image-restoration
+  - super-resolution
+  - denoising
+  - deblurring
