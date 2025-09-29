@@ -1,4 +1,4 @@
-name: Publish to PyPI (uv)
+# name: Publish to PyPI with uv (Trusted Publishing)
 
 on:
   push:
@@ -6,12 +6,12 @@ on:
       - 'v*.*.*'
 
 permissions:
+  id-token: write
   contents: read
 
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,13 +26,8 @@ jobs:
           curl -LsSf https://astral.sh/uv/install.sh | sh
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      - name: Build sdist and wheel (hatchling via uvx)
-        run: |
-          uvx --from hatchling hatchling build -t sdist -t wheel
+      - name: Build sdist and wheel
+        run: uvx --from hatchling hatchling build -t sdist -t wheel
 
-      - name: Publish to PyPI
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        run: |
-          uvx twine upload --non-interactive dist/*
+      - name: Publish to PyPI using Trusted Publishing
+        uses: pypa/gh-action-pypi-publish@release/v1
