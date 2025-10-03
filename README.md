@@ -35,6 +35,18 @@ Citation
 
 If you use ClarityCore in your research, please cite:
 
+```
+@software{ClarityCore_2025,
+          author = {Urumbekov, Aman},
+          license = {Apache-2.0},
+          month = sep,
+          title = {{ClarityCore}},
+          url = {https://github.com/Bezdarnost/claritycore},
+          version = {0.0.1},
+          year = {2025}
+}
+```
+
 Urumbekov, A. (2025). ClarityCore: A toolkit for low-level vision. Version 0.0.1. GitHub. https://github.com/bezdarnost/claritycore
 
 License
