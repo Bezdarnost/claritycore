@@ -1,3 +1,4 @@
+# Copyright (c) Aman Urumbekov and other contributors.
 from .losses import (  # noqa: F401
     CharbonnierLoss,
     HuberLoss,

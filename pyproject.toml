@@ -4,7 +4,11 @@ version = "0.0.1"
 description = "Next-generation Open Source toolkit for low-level vision. Engineered for state-of-the-art performance in image and video restoration, including Super-Resolution, Denoising, Deblurring, and more."
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "torch==2.7.0",
+    "torchvision==0.22.0",
+    "loguru==0.7.3",
+]
 
 authors = [
     { name = "Aman Urumbekov", email = "amanurumbekov@gmail.com" },
@@ -18,9 +22,6 @@ classifiers = [
     "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering :: Image Processing",
 ]
-
-[project.scripts]
-claritycore = "claritycore.__main__:main"
 
 [project.urls]
 Homepage = "https://github.com/Bezdarnost/claritycore"
