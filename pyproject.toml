@@ -23,8 +23,34 @@ classifiers = [
 claritycore = "claritycore.__main__:main"
 
 [project.urls]
-Homepage = "https://github.com/bezdarnost/claritycore"
-Repository = "https://github.com/bezdarnost/claritycore"
+Homepage = "https://github.com/Bezdarnost/claritycore"
+Repository = "https://github.com/Bezdarnost/claritycore"
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "pytest",
+    "pre-commit",
+    "yamlfix",
+]
+
+# Configuration for the Ruff linter and formatter
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+# See https://docs.astral.sh/ruff/rules/ for a full list of rules
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # Pyflakes
+    "I",  # isort
+    "UP", # pyupgrade
+]
+
+[tool.ruff.format]
+quote-style = "double"
 
 [build-system]
 requires = ["hatchling>=1.25.0"]
