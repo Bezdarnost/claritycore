@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Bezdarnost/claritycore/main/docs/assets/logo_full.png">
-    <img alt="vLLM" src="https://raw.githubusercontent.com/Bezdarnost/claritycore/main/docs/assets/logo_full.png" width=100%>
+    <img alt="ClarityCore" src="https://raw.githubusercontent.com/Bezdarnost/claritycore/main/docs/assets/logo_full.png" width=100%>
   </picture>
 </p>
 
