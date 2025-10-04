@@ -1,7 +1,17 @@
-ClarityCore
-===========
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Bezdarnost/claritycore/main/docs/assets/logo_full.png">
+    <img alt="vLLM" src="https://raw.githubusercontent.com/Bezdarnost/claritycore/main/docs/assets/logo_full.png" width=100%>
+  </picture>
+</p>
 
-Next-generation Open Source toolkit for low-level vision. Engineered for state-of-the-art performance in image and video restoration, including Super-Resolution, Denoising, Deblurring, and more.
+<h3 align="center">
+Easy and fast low-level vision for everyone
+</h3>
+
+---
+
+Next-generation Open Source toolkit for low-level vision. Engineered for state-of-the-art performance in image and video pixel2pixel tasks, including Super-Resolution, Denoising, Deblurring, and more.
 
 Quickstart (uv)
 ---------------
