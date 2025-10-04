@@ -29,6 +29,7 @@ class Registry:
 # Create global instances for different components of your project
 MODEL_REGISTRY = Registry("model")
 LOSS_REGISTRY = Registry("loss")
+METRIC_REGISTRY = Registry("metric")
 ARCH_REGISTRY = Registry("arch")
 DATASET_REGISTRY = Registry("dataset")
 TRAINER_REGISTRY = Registry("trainer")

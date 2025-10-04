@@ -102,3 +102,6 @@ ehthumbs.db
 # Documentation builds
 docs/_build/
 site/
+
+# Other
+experiments/
