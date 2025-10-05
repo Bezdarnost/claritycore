@@ -69,7 +69,7 @@ If you use ClarityCore in your research, please cite:
 }
 ```
 
-Urumbekov, A. (2025). ClarityCore: A toolkit for low-level vision. Version 0.0.1. GitHub. https://github.com/bezdarnost/claritycore
+Urumbekov, A. (2025). ClarityCore: A toolkit for low-level vision. GitHub. https://github.com/bezdarnost/claritycore
 
 ## Star History
 
