@@ -78,8 +78,8 @@ def ssim(
     https://github.com/XPixelGroup/BasicSR/blob/master/basicsr/metrics/psnr_ssim.py
 
     Args:
-        pred_img (torch.Tensor): Predicted image (range [0, 1], shape NCHW).
-        target_img (torch.Tensor): Ground-truth image (range [0, 1], shape NCHW).
+        pred_img (torch.Tensor): Predicted image (range [0, 1], shape BCHW).
+        target_img (torch.Tensor): Ground-truth image (range [0, 1], shape BCHW).
         crop_border (int): Pixels to crop from each border.
         convert_to_y_channel (bool): Whether to calculate on the Y channel of YCbCr.
 
@@ -108,8 +108,8 @@ def psnr(
     https://github.com/XPixelGroup/BasicSR/blob/master/basicsr/metrics/psnr_ssim.py
 
     Args:
-        pred_img (torch.Tensor): Predicted image (range [0, 1], shape NCHW).
-        target_img (torch.Tensor): Ground-truth image (range [0, 1], shape NCHW).
+        pred_img (torch.Tensor): Predicted image (range [0, 1], shape BCHW).
+        target_img (torch.Tensor): Ground-truth image (range [0, 1], shape BCHW).
         crop_border (int): Pixels to crop from each border.
         convert_to_y_channel (bool): Whether to calculate on the Y channel of YCbCr.
 
