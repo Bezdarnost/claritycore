@@ -20,11 +20,11 @@ Easy and fast low-level vision for everyone
 
 Next-generation Open Source toolkit for low-level vision. Engineered for state-of-the-art performance in image and video pixel2pixel tasks, including Super-Resolution, Denoising, Deblurring, and more.
 
-<p align="center">
-<b>
-If you find ClarityCore useful, please consider giving it a star ⭐ and **[Join Discord](https://discord.gg/Zw2kFTruD5)**!
-</b>
-</p>
+<div align="center">
+  
+If you find ClarityCore useful, please consider giving it a star ⭐ and **[Join Discord](https://discord.gg/Zw2kFTruD5)** !
+
+</div>
 
 ---
 
