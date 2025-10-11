@@ -3,7 +3,7 @@
 [![License Apache 2.0](https://badgen.net/badge/license/apache2.0/blue)](https://github.com/Bezdarnost/claritycore/blob/master/LICENSE)
 [![PyPI version](https://badge.fury.io/py/claritycore.svg)](https://pypi.org/project/claritycore/)
 <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10+-blue">
-<a href="hhttps://discord.gg/nyq6jP4g"><img alt="Discord" src="https://img.shields.io/discord/1426554369750470658?color=7289da&logo=discord&logoColor=white"></a>
+<a href="hhttps://discord.gg/Zw2kFTruD5"><img alt="Discord" src="https://img.shields.io/discord/1426554369750470658?color=7289da&logo=discord&logoColor=white"></a>
 
 <p align="center">
   <picture>
@@ -22,7 +22,7 @@ Next-generation Open Source toolkit for low-level vision. Engineered for state-o
 
 <p align="center">
 <b>
-If you find ClarityCore useful, please consider giving it a star ⭐!
+If you find ClarityCore useful, please consider giving it a star ⭐ and **[Join Discord](https://discord.gg/Zw2kFTruD5)**!
 </b>
 </p>
 
