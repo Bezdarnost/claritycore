@@ -1,8 +1,6 @@
-"""
-Copyright (c) Aman Urumbekov and other contributors.
+# Copyright (c) Aman Urumbekov and other contributors.
+"""Common utilities for claritycore."""
 
-Common utilities for claritycore.
-"""
 import os
 import sys
 from typing import Optional, Tuple
