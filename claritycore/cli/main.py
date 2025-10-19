@@ -6,13 +6,9 @@ import importlib.util
 from importlib.metadata import version
 from typing import Dict, List, Optional
 
-from claritycore.utils.common import (
-    print_banner,
-    print0,
-    setup_logger
-)
+from claritycore.utils.common import print_banner, print0, setup_logger
 
-# Map `clarity <subcmd>` -> Python module 
+# Map `clarity <subcmd>` -> Python module
 ROUTE_MAPPING: Dict[str, str] = {
     "train": "claritycore.cli.train",
     # "eval":  "claritycore.cli.eval",
@@ -35,11 +31,13 @@ Global:
 
 # ---------- helper functions ----------
 
+
 def _use_torchrun(subcmd: str) -> bool:
     """Enable torchrun when NPROC_PER_NODE or NNODES is set and command is eligible."""
     if subcmd not in {"train"}:
         return False
     return (os.getenv("NPROC_PER_NODE") is not None) or (os.getenv("NNODES") is not None)
+
 
 def _torchrun_args() -> List[str]:
     args: List[str] = []
@@ -49,6 +47,7 @@ def _torchrun_args() -> List[str]:
             args += [f"--{key.lower()}", val]
     return args
 
+
 def _resolve_module_file(mod: str) -> str:
     """Return the file path of a module, or exit with a helpful error."""
     spec = importlib.util.find_spec(mod)
@@ -57,15 +56,18 @@ def _resolve_module_file(mod: str) -> str:
         sys.exit(2)
     return spec.origin
 
+
 def _print_help_and_exit(code: int = 0) -> None:
     print_banner()
     print0(HELP_TEXT)
     sys.exit(code)
 
+
 def _print_version_and_exit() -> None:
     v = version("claritycore")
     print0(v)
     sys.exit(0)
+
 
 def cli_main(route_mapping: Optional[Dict[str, str]] = None) -> None:
     # rank-aware logging early (only leader emits by default)
