@@ -3,6 +3,7 @@ import os
 import sys
 import subprocess
 import importlib.util
+from importlib.metadata import version
 from typing import Dict, List, Optional
 
 from claritycore.utils.common import (
