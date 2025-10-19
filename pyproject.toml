@@ -1,6 +1,6 @@
 [project]
 name = "claritycore"
-version = "0.0.3"
+version = "0.0.4"
 description = "Next-generation Open Source toolkit for low-level vision. Engineered for state-of-the-art performance in image and video restoration, including Super-Resolution, Denoising, Deblurring, and more."
 readme = "README.md"
 requires-python = ">=3.10"
