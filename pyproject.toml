@@ -28,6 +28,9 @@ classifiers = [
 Homepage = "https://github.com/Bezdarnost/claritycore"
 Repository = "https://github.com/Bezdarnost/claritycore"
 
+[project.scripts]
+claritycore = "claritycore.cli:main"
+
 [project.optional-dependencies]
 dev = [
     "ruff",
