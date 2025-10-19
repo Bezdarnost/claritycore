@@ -29,7 +29,8 @@ Homepage = "https://github.com/Bezdarnost/claritycore"
 Repository = "https://github.com/Bezdarnost/claritycore"
 
 [project.scripts]
-claritycore = "claritycore.cli:main"
+clarity = "claritycore.cli.main:cli_main"
+claritycore = "claritycore.cli.main:cli_main"
 
 [project.optional-dependencies]
 dev = [
