@@ -1,3 +1,4 @@
+# Copyright (c) Aman Urumbekov and other contributors.
 class Registry:
     """
     A simple registry class that maps names to objects.

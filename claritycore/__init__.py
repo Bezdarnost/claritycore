@@ -18,9 +18,6 @@ ClarityCore: Next-generation Open Source toolkit for low-level vision.
 Engineered for state-of-the-art performance in image and video restoration,
 including Super-Resolution, Denoising, Deblurring, and more.
 """
+from importlib.metadata import version
 
-__all__ = [
-    "__version__",
-]
-
-__version__ = "0.0.3"
+__version__ = version("claritycore")
