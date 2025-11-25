@@ -29,6 +29,7 @@ If you find ClarityCore useful, please consider giving it a star ⭐ and **[Join
 ---
 
 *Latest News* 🚀
+- I am not very busy at my current position. I want to continue this project in ~January
 - [2025/10] Project start
 
 ---
