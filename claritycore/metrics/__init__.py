@@ -4,4 +4,3 @@
 from claritycore.metrics.psnr_ssim import psnr, ssim
 
 __all__ = ["psnr", "ssim"]
-

@@ -137,12 +137,9 @@ def ssim(
     sigma2_sq = F.conv2d(target * target, kernel, groups=target.shape[1], padding=0) - mu2_sq
     sigma12 = F.conv2d(pred * target, kernel, groups=pred.shape[1], padding=0) - mu1_mu2
 
-    ssim_map = ((2 * mu1_mu2 + c1) * (2 * sigma12 + c2)) / (
-        (mu1_sq + mu2_sq + c1) * (sigma1_sq + sigma2_sq + c2)
-    )
+    ssim_map = ((2 * mu1_mu2 + c1) * (2 * sigma12 + c2)) / ((mu1_sq + mu2_sq + c1) * (sigma1_sq + sigma2_sq + c2))
 
     return ssim_map.mean(dim=(1, 2, 3))
 
 
 __all__ = ["psnr", "ssim"]
-

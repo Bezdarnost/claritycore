@@ -3,13 +3,12 @@
 
 from abc import ABC, abstractmethod
 from copy import deepcopy
-from dataclasses import dataclass, field, asdict
-from typing import Any, Literal
+from dataclasses import asdict, dataclass
+from typing import Any
 
 import torch
 import torch.nn as nn
 from loguru import logger
-
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # BASE CONFIG
@@ -35,14 +34,29 @@ class BaseConfig:
     # Model identification
     model_type: str = "base"
 
-    # Common parameters
+    # Common parameters (shared by all models)
     in_channels: int = 3
     out_channels: int = 3
     scale: int = 4
 
+    # Fields that are common to all models (not architecture-specific)
+    _common_fields: tuple[str, ...] = ("model_type", "in_channels", "out_channels", "scale")
+
     def to_dict(self) -> dict[str, Any]:
         """Convert config to dictionary."""
         return asdict(self)
+
+    def get_arch_config(self) -> dict[str, Any]:
+        """
+        Get architecture-specific parameters (excludes common fields).
+
+        Returns dict of parameters unique to this model architecture.
+        """
+        result = {}
+        for field_name in self.__dataclass_fields__:
+            if field_name not in self._common_fields and not field_name.startswith("_"):
+                result[field_name] = getattr(self, field_name)
+        return result
 
     @classmethod
     def from_dict(cls, config_dict: dict[str, Any]) -> "BaseConfig":
@@ -311,4 +325,3 @@ class BaseModel(nn.Module, ABC):
     def __repr__(self) -> str:
         params = self.count_parameters()
         return f"{self.__class__.__name__}(params={params:,}, config={self.config.model_type})"
-

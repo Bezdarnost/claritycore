@@ -3,12 +3,12 @@
 
 from abc import ABC
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 import torch
 from loguru import logger
 
-from claritycore.utils import console, is_leader, print_metrics, print_success
+from claritycore.utils import is_leader, print_success
 
 if TYPE_CHECKING:
     from claritycore.training.trainer import Trainer
@@ -82,9 +82,7 @@ class LoggingCallback(Callback):
             lr = trainer.optimizer.param_groups[0]["lr"] if trainer.optimizer else 0
 
             logger.info(
-                f"[cyan]Step {trainer.global_step:,}[/] | "
-                f"Epoch {trainer.current_epoch} | "
-                f"lr: {lr:.2e} | {loss_str}",
+                f"[cyan]Step {trainer.global_step:,}[/] | Epoch {trainer.current_epoch} | lr: {lr:.2e} | {loss_str}",
             )
 
             # Reset accumulator
@@ -231,4 +229,3 @@ __all__ = [
     "EMACallback",
     "LRSchedulerCallback",
 ]
-

@@ -244,12 +244,12 @@ _BANNER_LINES = [
 
 # ANSI true color gradient: cyan → blue → purple (sci-fi aesthetic)
 _ANSI_GRADIENT = [
-    "\033[1m\033[38;2;0;255;255m",    # Bold cyan
-    "\033[1m\033[38;2;0;229;255m",    # Bold light cyan
-    "\033[38;2;0;204;255m",           # Sky blue
-    "\033[38;2;51;187;255m",          # Light blue
-    "\033[38;2;102;153;255m",         # Periwinkle
-    "\033[38;2;153;102;255m",         # Purple
+    "\033[1m\033[38;2;0;255;255m",  # Bold cyan
+    "\033[1m\033[38;2;0;229;255m",  # Bold light cyan
+    "\033[38;2;0;204;255m",  # Sky blue
+    "\033[38;2;51;187;255m",  # Light blue
+    "\033[38;2;102;153;255m",  # Periwinkle
+    "\033[38;2;153;102;255m",  # Purple
 ]
 _ANSI_RESET = "\033[0m"
 _ANSI_DIM = "\033[2m"

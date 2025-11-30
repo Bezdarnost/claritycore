@@ -115,17 +115,13 @@ class PerceptualLoss(nn.Module):
         self._vgg = None
 
         # ImageNet normalization
-        self.register_buffer(
-            "mean", torch.tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1)
-        )
-        self.register_buffer(
-            "std", torch.tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1)
-        )
+        self.register_buffer("mean", torch.tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1))
+        self.register_buffer("std", torch.tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1))
 
     def _load_vgg(self, device: torch.device) -> nn.Module:
         """Lazily load VGG model."""
         if self._vgg is None:
-            from torchvision.models import vgg19, VGG19_Weights
+            from torchvision.models import VGG19_Weights, vgg19
 
             vgg = vgg19(weights=VGG19_Weights.IMAGENET1K_V1).features
             vgg.eval()
@@ -279,4 +275,3 @@ __all__ = [
     "GANLoss",
     "get_loss",
 ]
-

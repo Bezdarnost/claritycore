@@ -14,26 +14,25 @@ from pathlib import Path
 
 import torch
 from torch.utils.data import DataLoader
-from loguru import logger
 
+from claritycore.data import DatasetConfig, NormConfig, Pixel2PixelDataset
 from claritycore.models import AutoConfig, AutoModel
-from claritycore.models.losses import L1Loss, CharbonnierLoss, PerceptualLoss
+from claritycore.models.losses import CharbonnierLoss, L1Loss, PerceptualLoss
 from claritycore.training import Trainer, TrainingConfig
 from claritycore.training.callbacks import (
-    LoggingCallback,
     CheckpointCallback,
     EMACallback,
+    LoggingCallback,
     LRSchedulerCallback,
 )
-from claritycore.data import ImagePairDataset
 from claritycore.utils import (
-    set_seed,
-    print_panel,
-    print_success,
+    is_leader,
     print_error,
     print_info,
+    print_panel,
     print_rule,
-    is_leader,
+    print_success,
+    set_seed,
 )
 
 
@@ -53,22 +52,36 @@ def parse_args() -> argparse.Namespace:
     model_group.add_argument("--scale", type=int, default=4, help="Upscaling factor")
     model_group.add_argument("--num-feat", type=int, default=64, help="Feature channels")
     model_group.add_argument("--num-block", type=int, default=23, help="Number of blocks")
+    model_group.add_argument("--num-grow-ch", type=int, default=32, help="Growth channels (RRDBNet)")
 
     # Data settings
     data_group = p.add_argument_group("Data")
     data_group.add_argument("--data", type=str, required=True, help="Path to dataset root")
-    data_group.add_argument("--hq-dir", type=str, default="hr", help="HQ images subdirectory")
-    data_group.add_argument("--lq-dir", type=str, default=None, help="LQ images subdirectory (default: x{scale})")
-    data_group.add_argument("--lq-suffix", type=str, default=None, help="LQ filename suffix (e.g., 'x4' for 0001x4.png)")
+    data_group.add_argument("--target-dir", type=str, default="hr", help="Target (HQ) images subdirectory")
+    data_group.add_argument(
+        "--input-dir", type=str, default=None, help="Input (LQ) images subdirectory (default: x{scale})"
+    )
+    data_group.add_argument(
+        "--input-suffix", type=str, default=None, help="Input filename suffix (auto-detected if not set)"
+    )
     data_group.add_argument("--patch-size", type=int, default=256, help="Training patch size")
     data_group.add_argument("--batch-size", type=int, default=8, help="Batch size")
     data_group.add_argument("--num-workers", type=int, default=4, help="DataLoader workers")
+    data_group.add_argument(
+        "--norm",
+        type=str,
+        default="minus_one_one",
+        choices=["zero_one", "minus_one_one", "none"],
+        help="Normalization mode",
+    )
 
     # Training settings
     train_group = p.add_argument_group("Training")
     train_group.add_argument("--steps", type=int, default=100000, help="Total training steps")
     train_group.add_argument("--lr", type=float, default=2e-4, help="Learning rate")
-    train_group.add_argument("--loss", type=str, default="l1", choices=["l1", "charbonnier", "perceptual"], help="Loss function")
+    train_group.add_argument(
+        "--loss", type=str, default="l1", choices=["l1", "charbonnier", "perceptual"], help="Loss function"
+    )
     train_group.add_argument("--val-freq", type=int, default=5000, help="Validation frequency")
     train_group.add_argument("--log-freq", type=int, default=100, help="Logging frequency")
     train_group.add_argument("--save-freq", type=int, default=5000, help="Checkpoint save frequency")
@@ -110,15 +123,14 @@ def get_loss(name: str) -> torch.nn.Module:
 def main():
     args = parse_args()
 
-    # Load YAML config if provided
+    # Load YAML config if provided (TODO: implement config merging)
     if args.config:
-        config = load_yaml_config(args.config)
+        _config = load_yaml_config(args.config)  # noqa: F841
         # Override with CLI args (CLI takes precedence)
         for key, value in vars(args).items():
             if value is not None and key != "config":
-                # Nested update would go here for complex configs
                 pass
-    
+
     # Set seed
     set_seed(args.seed)
 
@@ -136,6 +148,7 @@ def main():
             f"[bold]Batch:[/bold] {args.batch_size}\n"
             f"[bold]LR:[/bold] {args.lr}\n"
             f"[bold]Loss:[/bold] {args.loss}\n"
+            f"[bold]Norm:[/bold] {args.norm}\n"
             f"[bold]AMP:[/bold] {args.amp}",
             title="◈ Training Setup",
         )
@@ -144,46 +157,48 @@ def main():
     # Dataset
     # ─────────────────────────────────────────────────────────────────────────
     data_root = Path(args.data)
-    hq_root = data_root / args.hq_dir
-    lq_dir = args.lq_dir or f"x{args.scale}"
-    lq_root = data_root / lq_dir
+    target_dir = data_root / args.target_dir
 
-    if not hq_root.exists():
-        print_error(f"HQ directory not found: {hq_root}")
+    # Determine input directory
+    input_dir_name = args.input_dir or f"x{args.scale}"
+    input_dir = data_root / input_dir_name
+
+    if not target_dir.exists():
+        print_error(f"Target directory not found: {target_dir}")
         sys.exit(1)
 
-    # Auto-detect lq_suffix if not provided
-    lq_suffix = args.lq_suffix
-    if lq_suffix is None and lq_root.exists():
-        # Try to detect suffix by checking first HQ file
-        first_hq = next(hq_root.rglob("*.[pP][nN][gG]"), None) or next(hq_root.rglob("*.[jJ][pP][gG]"), None)
-        if first_hq:
-            # Check if LQ has suffix pattern (e.g., x4)
-            test_lq = lq_root / f"{first_hq.stem}x{args.scale}{first_hq.suffix}"
-            if test_lq.exists():
-                lq_suffix = f"x{args.scale}"
-                print_info(f"Auto-detected LQ suffix: '{lq_suffix}'")
+    # Create normalization config
+    norm_config = NormConfig(mode=args.norm)
 
-    # Check if we have paired LQ data or need self-supervised
-    if lq_root.exists():
-        print_info(f"Using paired data: HQ={hq_root}, LQ={lq_root}")
-        train_dataset = ImagePairDataset(
-            hq_root=str(hq_root),
-            lq_root=str(lq_root),
-            scale=args.scale,
-            patch_size=args.patch_size,
-            mode="train",
-            lq_suffix=lq_suffix,
-        )
+    # Create dataset config
+    train_data_config = DatasetConfig(
+        target_dir=str(target_dir),
+        input_dir=str(input_dir) if input_dir.exists() else None,
+        scale=args.scale,
+        input_suffix=args.input_suffix,
+        patch_size=args.patch_size,
+        augment=True,
+        normalize=norm_config,
+    )
+
+    val_data_config = DatasetConfig(
+        target_dir=str(target_dir),
+        input_dir=str(input_dir) if input_dir.exists() else None,
+        scale=args.scale,
+        input_suffix=args.input_suffix,
+        patch_size=None,  # Full images for validation
+        augment=False,
+        normalize=norm_config,
+    )
+
+    # Create datasets
+    if input_dir.exists():
+        print_info(f"Paired data: target={target_dir}, input={input_dir}")
     else:
-        print_info(f"Using self-supervised mode (downscaling from HQ)")
-        train_dataset = ImagePairDataset(
-            hq_root=str(hq_root),
-            lq_root=None,
-            scale=args.scale,
-            patch_size=args.patch_size,
-            mode="train",
-        )
+        print_info("Self-supervised mode: generating input from target")
+
+    train_dataset = Pixel2PixelDataset(train_data_config, mode="train")
+    val_dataset = Pixel2PixelDataset(val_data_config, mode="val")
 
     train_loader = DataLoader(
         train_dataset,
@@ -192,16 +207,6 @@ def main():
         num_workers=args.num_workers,
         pin_memory=True,
         drop_last=True,
-    )
-
-    # Validation loader (use full images, smaller batch)
-    val_dataset = ImagePairDataset(
-        hq_root=str(hq_root),
-        lq_root=str(lq_root) if lq_root.exists() else None,
-        scale=args.scale,
-        patch_size=None,  # Full images
-        mode="val",
-        lq_suffix=lq_suffix,
     )
 
     val_loader = DataLoader(
@@ -225,6 +230,7 @@ def main():
         scale=args.scale,
         num_feat=args.num_feat,
         num_block=args.num_block,
+        num_grow_ch=args.num_grow_ch,
     )
 
     model = AutoModel.from_config(model_config)
@@ -282,11 +288,13 @@ def main():
 
     # Add callbacks
     trainer.add_callback(LoggingCallback(log_freq=args.log_freq))
-    trainer.add_callback(CheckpointCallback(
-        save_dir=output_dir / "checkpoints",
-        save_freq=args.save_freq,
-        save_best=True,
-    ))
+    trainer.add_callback(
+        CheckpointCallback(
+            save_dir=output_dir / "checkpoints",
+            save_freq=args.save_freq,
+            save_best=True,
+        )
+    )
 
     if args.ema:
         trainer.add_callback(EMACallback(decay=0.999))

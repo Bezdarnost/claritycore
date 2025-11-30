@@ -38,8 +38,7 @@ def trunc_normal_(
 
     if (mean < a - 2 * std) or (mean > b + 2 * std):
         warnings.warn(
-            "mean is more than 2 std from [a, b] in trunc_normal_. "
-            "The distribution may be incorrect.",
+            "mean is more than 2 std from [a, b] in trunc_normal_. The distribution may be incorrect.",
             stacklevel=2,
         )
 
@@ -98,4 +97,3 @@ def default_init_weights(
 
 
 __all__ = ["trunc_normal_", "default_init_weights"]
-

@@ -3,8 +3,9 @@
 
 import os
 import sys
+from collections.abc import Callable
 from functools import wraps
-from typing import Any, Callable, ParamSpec, TypeVar
+from typing import Any, ParamSpec, TypeVar
 
 from loguru import logger
 

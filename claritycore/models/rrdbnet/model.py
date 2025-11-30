@@ -2,12 +2,11 @@
 """RRDBNet model wrapper with training support."""
 
 import torch
-import torch.nn as nn
 
-from claritycore.models.base import BaseModel
 from claritycore.models.auto import register_model
-from claritycore.models.rrdbnet.config import RRDBNetConfig
+from claritycore.models.base import BaseModel
 from claritycore.models.rrdbnet.architecture import RRDBNet
+from claritycore.models.rrdbnet.config import RRDBNetConfig
 
 
 @register_model("rrdbnet")
@@ -153,4 +152,3 @@ class RRDBNetModel(BaseModel):
 
 
 __all__ = ["RRDBNetModel"]
-

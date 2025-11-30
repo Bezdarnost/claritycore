@@ -2,12 +2,10 @@
 """Main trainer class for ClarityCore."""
 
 import time
-from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Any, Callable
+from collections.abc import Callable
+from dataclasses import dataclass
 
 import torch
-import torch.nn as nn
 from loguru import logger
 from torch.utils.data import DataLoader
 
@@ -169,10 +167,7 @@ class Trainer:
                 self._run_callbacks("on_step_end", loss_dict)
 
                 # Validation
-                if (
-                    self.val_loader is not None
-                    and self.global_step % self.config.val_freq == 0
-                ):
+                if self.val_loader is not None and self.global_step % self.config.val_freq == 0:
                     self._validate()
 
                 self._run_callbacks("on_epoch_end")
@@ -182,20 +177,20 @@ class Trainer:
         if is_leader():
             elapsed = time.time() - self.start_time
             print_rule("Training Complete")
-            print_success(f"Finished {self.config.total_steps:,} steps in {elapsed/3600:.2f} hours")
+            print_success(f"Finished {self.config.total_steps:,} steps in {elapsed / 3600:.2f} hours")
 
     def _training_step(self, batch: dict[str, torch.Tensor]) -> dict[str, float]:
         """Execute a single training step."""
         device = self.model.device
 
-        # Move batch to device
-        lq = batch["lq"].to(device)
-        gt = batch["gt"].to(device)
+        # Move batch to device (support both naming conventions)
+        input_img = batch["input"].to(device)
+        target = batch["target"].to(device)
 
         # Forward pass with optional mixed precision
         with torch.amp.autocast("cuda", enabled=self.config.mixed_precision):
-            output = self.model(lq)
-            loss, loss_dict = self.model.compute_loss(output, gt)
+            output = self.model(input_img)
+            loss, loss_dict = self.model.compute_loss(output, target)
 
             # Scale for gradient accumulation
             loss = loss / self.config.gradient_accumulation_steps
@@ -253,21 +248,27 @@ class Trainer:
         device = self.model.device
 
         for batch in self.val_loader:
-            lq = batch["lq"].to(device)
-            gt = batch["gt"].to(device)
+            # Support both naming conventions
+            input_img = batch.get("input", batch.get("lq")).to(device)
+            target = batch.get("target", batch.get("gt")).to(device)
 
             # Inference
             if hasattr(self.model, "inference"):
-                output = self.model.inference(lq)
+                output = self.model.inference(input_img)
             else:
-                output = self.model(lq)
+                output = self.model(input_img)
+
+            # Denormalize if needed (assume [-1, 1] -> [0, 1])
+            if output.min() < 0:
+                output = (output + 1) / 2
+                target = (target + 1) / 2
 
             output = output.clamp(0, 1)
-            gt = gt.clamp(0, 1)
+            target = target.clamp(0, 1)
 
             # Compute metrics
-            psnr_sum += psnr(output, gt).sum().item()
-            ssim_sum += ssim(output, gt).sum().item()
+            psnr_sum += psnr(output, target).sum().item()
+            ssim_sum += ssim(output, target).sum().item()
             count += output.shape[0]
 
         return {
@@ -300,4 +301,3 @@ class Trainer:
 
 
 __all__ = ["Trainer", "TrainingConfig"]
-

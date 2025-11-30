@@ -6,6 +6,7 @@ Denoising, Deblurring, and more.
 
 Example usage:
     from claritycore.models import AutoModel, AutoConfig
+    from claritycore.data import Pixel2PixelDataset, DatasetConfig
 
     # Create a model
     config = AutoConfig.from_name("rrdbnet", scale=4)
@@ -13,9 +14,9 @@ Example usage:
 
     # Training
     from claritycore.training import Trainer, TrainingConfig
-    from claritycore.data import ImagePairDataset
 
-    dataset = ImagePairDataset(hq_root="data/train/HQ", scale=4)
+    data_config = DatasetConfig(target_dir="data/HR", scale=4)
+    dataset = Pixel2PixelDataset(data_config)
     trainer = Trainer(model, train_loader, optimizer, config)
     trainer.train()
 
@@ -27,10 +28,10 @@ from importlib.metadata import version
 __version__ = version("claritycore")
 
 # Convenience imports
+from claritycore.data import DatasetConfig, NormConfig, Pixel2PixelDataset
+from claritycore.metrics import psnr, ssim
 from claritycore.models import AutoConfig, AutoModel
 from claritycore.training import Trainer, TrainingConfig
-from claritycore.data import ImagePairDataset
-from claritycore.metrics import psnr, ssim
 
 __all__ = [
     "__version__",
@@ -38,7 +39,9 @@ __all__ = [
     "AutoModel",
     "Trainer",
     "TrainingConfig",
-    "ImagePairDataset",
+    "Pixel2PixelDataset",
+    "DatasetConfig",
+    "NormConfig",
     "psnr",
     "ssim",
 ]

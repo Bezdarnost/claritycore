@@ -77,17 +77,21 @@ class Upsample(nn.Sequential):
         if mode == "classic":
             # PixelShuffle-based upsampling
             if one_step:
-                layers.extend([
-                    nn.Conv2d(num_feat, num_feat * (scale**2), 3, 1, 1),
-                    nn.PixelShuffle(scale),
-                ])
+                layers.extend(
+                    [
+                        nn.Conv2d(num_feat, num_feat * (scale**2), 3, 1, 1),
+                        nn.PixelShuffle(scale),
+                    ]
+                )
             else:
                 factors = self._prime_factors(scale)
                 for i, factor in enumerate(factors):
-                    layers.extend([
-                        nn.Conv2d(num_feat, num_feat * (factor**2), 3, 1, 1),
-                        nn.PixelShuffle(factor),
-                    ])
+                    layers.extend(
+                        [
+                            nn.Conv2d(num_feat, num_feat * (factor**2), 3, 1, 1),
+                            nn.PixelShuffle(factor),
+                        ]
+                    )
                     if act_layer is not None and i < len(factors) - 1:
                         layers.append(act_layer())
 
@@ -95,17 +99,21 @@ class Upsample(nn.Sequential):
             # Interpolation-based upsampling
             kwargs.setdefault("mode", "nearest")
             if one_step:
-                layers.extend([
-                    nn.Upsample(scale_factor=scale, **kwargs),
-                    nn.Conv2d(num_feat, num_feat, 3, 1, 1),
-                ])
+                layers.extend(
+                    [
+                        nn.Upsample(scale_factor=scale, **kwargs),
+                        nn.Conv2d(num_feat, num_feat, 3, 1, 1),
+                    ]
+                )
             else:
                 factors = self._prime_factors(scale)
                 for i, factor in enumerate(factors):
-                    layers.extend([
-                        nn.Upsample(scale_factor=factor, **kwargs),
-                        nn.Conv2d(num_feat, num_feat, 3, 1, 1),
-                    ])
+                    layers.extend(
+                        [
+                            nn.Upsample(scale_factor=factor, **kwargs),
+                            nn.Conv2d(num_feat, num_feat, 3, 1, 1),
+                        ]
+                    )
                     if act_layer is not None and i < len(factors) - 1:
                         layers.append(act_layer())
         else:
@@ -129,4 +137,3 @@ class Upsample(nn.Sequential):
 
 
 __all__ = ["MLP", "Upsample"]
-

@@ -13,8 +13,8 @@ Based on implementation from:
 import torch
 import torch.nn as nn
 
-from claritycore.models.common.layers import Upsample
 from claritycore.models.common.init import default_init_weights
+from claritycore.models.common.layers import Upsample
 
 
 class ResidualDenseBlock(nn.Module):
@@ -167,4 +167,3 @@ class RRDBNet(nn.Module):
 
 
 __all__ = ["RRDBNet", "RRDB", "ResidualDenseBlock"]
-

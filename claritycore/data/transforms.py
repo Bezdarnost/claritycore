@@ -2,7 +2,7 @@
 """Image transforms for data augmentation."""
 
 import random
-from typing import Callable
+from collections.abc import Callable
 
 import numpy as np
 
@@ -37,4 +37,3 @@ def get_val_transforms() -> Callable | None:
 
 
 __all__ = ["get_train_transforms", "get_val_transforms"]
-
