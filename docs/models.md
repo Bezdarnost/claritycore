@@ -10,7 +10,8 @@ This document provides comprehensive information about all models available in C
 
 ---
 
-## RRDBNet
+<details>
+<summary>RRDBNet</summary>
 
 **Residual-in-Residual Dense Block Network** - The generator architecture from ESRGAN.
 
@@ -23,47 +24,6 @@ RRDBNet is a powerful CNN architecture for image super-resolution. It achieves e
 - Residual-in-Residual Dense Blocks (RRDB) for deep feature extraction
 - Leaky ReLU activations throughout
 - Pixel shuffle upsampling for efficient high-resolution output
-
-### Architecture Details
-
-```
-Input (H×W×3)
-    │
-    ▼
-┌─────────────────────────┐
-│   Conv 3×3 (num_feat)   │
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│                         │
-│    RRDB × num_block     │  ◄── Main feature extraction
-│                         │
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│   Conv 3×3 (num_feat)   │
-└────────────┬────────────┘
-             │
-             + ─────────────────────┐ (Global residual)
-             │                      │
-             ▼                      │
-┌─────────────────────────┐         │
-│   Upsample (×scale)     │         │
-│   (Pixel Shuffle)       │         │
-└────────────┬────────────┘         │
-             │                      │
-             ▼                      │
-┌─────────────────────────┐         │
-│   Conv 3×3 (num_feat)   │ ◄───────┘
-│   LeakyReLU             │
-│   Conv 3×3 (3)          │
-└────────────┬────────────┘
-             │
-             ▼
-      Output (sH×sW×3)
-```
 
 ### Configuration
 
@@ -352,6 +312,7 @@ claritycore train \
     --amp \
     --name my_experiment
 ```
+</details>
 
 ---
 
