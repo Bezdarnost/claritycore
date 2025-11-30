@@ -1,24 +1,44 @@
 """
-Copyright 2025 Aman Urumbekov
+ClarityCore: Next-generation toolkit for image & video restoration.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+Engineered for state-of-the-art performance in Super-Resolution,
+Denoising, Deblurring, and more.
 
-    http://www.apache.org/licenses/LICENSE-2.0
+Example usage:
+    from claritycore.models import AutoModel, AutoConfig
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+    # Create a model
+    config = AutoConfig.from_name("rrdbnet", scale=4)
+    model = AutoModel.from_config(config)
 
-ClarityCore: Next-generation Open Source toolkit for low-level vision.
+    # Training
+    from claritycore.training import Trainer, TrainingConfig
+    from claritycore.data import ImagePairDataset
 
-Engineered for state-of-the-art performance in image and video restoration,
-including Super-Resolution, Denoising, Deblurring, and more.
+    dataset = ImagePairDataset(hq_root="data/train/HQ", scale=4)
+    trainer = Trainer(model, train_loader, optimizer, config)
+    trainer.train()
+
+Copyright 2025 Aman Urumbekov. Apache License 2.0.
 """
 
 from importlib.metadata import version
 
 __version__ = version("claritycore")
+
+# Convenience imports
+from claritycore.models import AutoConfig, AutoModel
+from claritycore.training import Trainer, TrainingConfig
+from claritycore.data import ImagePairDataset
+from claritycore.metrics import psnr, ssim
+
+__all__ = [
+    "__version__",
+    "AutoConfig",
+    "AutoModel",
+    "Trainer",
+    "TrainingConfig",
+    "ImagePairDataset",
+    "psnr",
+    "ssim",
+]
